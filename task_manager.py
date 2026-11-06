@@ -34,14 +34,16 @@ def set_master_password():
     return master_password
 
 def login_gate(master_password):
+    if not master_password:
+        print("Майстер-пароль не встановлено. Вхід неможливий.")
+        return False
     print("\nВхід до Менеджера завдань.")
     while True:
         entered = input("Введи пароль: ")
         if entered == master_password:
             print("Пароль правильний. Ласкаво просимо!")
-            break
-        else:
-            print("Невірний пароль, спробуй ще раз.")
+            return True
+        print("Невірний пароль, спробуй ще раз.")
 
 def show_menu():
     print("\nМеню:")
@@ -104,21 +106,24 @@ def delete_task():
         print("Немає завдань.")
         return
     view_tasks()
-    try:
-        index = int(input("Введіть номер завдання для видалення: ")) - 1
-        if 0 <= index < len(tasks):
-            tasks.pop(index)
-            save_tasks(tasks)
-        else:
-            print("Немає завдання з таким номером.")
-    except ValueError:
-        print("Введіть числове значення.")
+    number = input("Введіть номер завдання для видалення: ")
+    if not number.isdigit():
+        print("Потрібно ввести число.")
+        return
+    index = int(number) - 1
+    if 0 <= index < len(tasks):
+        removed = tasks.pop(index)
+        save_tasks(tasks)
+        print("Завдання видалено:", removed["text"])
+    else:
+        print("Немає завдання з таким номером.")
 
 def main():
     global tasks
     tasks = load_tasks()
     master_password = set_master_password()
-    login_gate(master_password)
+    if not login_gate(master_password):
+        return
     while True:
         choice = show_menu()
         if choice == "1":
