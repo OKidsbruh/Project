@@ -51,8 +51,9 @@ def show_menu():
     print("2) Переглянути завдання")
     print("3) Видалити завдання")
     print("4) Позначити завдання виконаним")
-    print("5) Змінити майстер-пароль")
-    print("6) Вихід")
+    print("5) Скасувати виконання завдання")
+    print("6) Змінити майстер-пароль")
+    print("7) Вихід")
     return input("Ваш вибір: ")
 
 def load_tasks(filename=TASKS_FILE):
@@ -119,6 +120,32 @@ def delete_task():
     else:
         print("Немає завдання з таким номером.")
 
+def cancel_task_done():
+    if not tasks:
+        print("Список завдань порожній.")
+        return
+
+    view_tasks()
+    number = input("Введи номер завдання для скасування виконання: ")
+
+    if not number.isdigit():
+        print("Потрібно ввести число.")
+        return
+
+    number = int(number)
+
+    if number < 1 or number > len(tasks):
+        print("Немає завдання з таким номером.")
+        return
+
+    if tasks[number - 1]["completed"] == False:
+        print("Це завдання ще не виконане.")
+        return
+
+    tasks[number - 1]["completed"] = False
+    save_tasks(tasks)
+    print("Виконання завдання скасовано:", tasks[number - 1]["text"])
+
 def change_master_password(master_password):
     print("\nЗміна майстер-пароля")
     old_password = input("Введіть старий пароль: ")
@@ -152,8 +179,10 @@ def main():
         elif choice == "4":
             mark_task_done()
         elif choice == "5":
-            master_password = change_master_password(master_password)
+            cancel_task_done()
         elif choice == "6":
+            master_password = change_master_password(master_password)
+        elif choice == "7":
             print("Ви вийшли з програми.")
             break
         else:
