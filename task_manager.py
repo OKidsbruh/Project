@@ -1,5 +1,6 @@
 import json
 import random
+from typing import Any
 
 TASKS_FILE = "tasks.json"
 tasks = []
@@ -52,8 +53,9 @@ def show_menu():
     print("3) Видалити завдання")
     print("4) Позначити завдання виконаним")
     print("5) Скасувати виконання завдання")
-    print("6) Змінити майстер-пароль")
-    print("7) Вихід")
+    print("6) Пошук завдання")
+    print("7) Змінити майстер-пароль")
+    print("8) Вихід")
     return input("Ваш вибір: ")
 
 def load_tasks(filename=TASKS_FILE):
@@ -102,6 +104,19 @@ def view_tasks():
     for i, task in enumerate(tasks, 1):
         status = "Виконано" if task["completed"] else "В процесі"
         print(f"{i}. {task['text']} [{status}]")
+
+def search_task():
+    word = input("Введіть слово для пошуку: ")
+    found = False
+
+    for i, task in enumerate[Any](tasks, 1):
+        if word.lower() in task["text"].lower():
+            status = "Виконано" if task["completed"] else "В процесі"
+            print(f"{i}. {task['text']} [{status}]")
+            found = True
+
+    if found == False:
+        print("Завдання не знайдено.")
 
 def delete_task():
     if not tasks:
@@ -181,8 +196,10 @@ def main():
         elif choice == "5":
             cancel_task_done()
         elif choice == "6":
-            master_password = change_master_password(master_password)
+            search_task()
         elif choice == "7":
+            master_password = change_master_password(master_password)
+        elif choice == "8":
             print("Ви вийшли з програми.")
             break
         else:
