@@ -51,7 +51,8 @@ def show_menu():
     print("2) Переглянути завдання")
     print("3) Видалити завдання")
     print("4) Позначити завдання виконаним")
-    print("5) Вихід")
+    print("5) Змінити майстер-пароль")
+    print("6) Вихід")
     return input("Ваш вибір: ")
 
 def load_tasks(filename=TASKS_FILE):
@@ -118,6 +119,22 @@ def delete_task():
     else:
         print("Немає завдання з таким номером.")
 
+def change_master_password(master_password):
+    print("\nЗміна майстер-пароля")
+    old_password = input("Введіть старий пароль: ")
+
+    if old_password != master_password:
+        print("Неправильний старий пароль.")
+        return master_password
+
+    new_password = input("Введіть новий пароль: ")
+
+    if len(new_password) < 8:
+        print("Пароль має бути не менше 8 символів.")
+        return master_password
+
+    print("Майстер-пароль успішно змінено!")
+    return new_password
 def main():
     global tasks
     tasks = load_tasks()
@@ -135,6 +152,8 @@ def main():
         elif choice == "4":
             mark_task_done()
         elif choice == "5":
+            master_password = change_master_password(master_password)
+        elif choice == "6":
             print("Ви вийшли з програми.")
             break
         else:
